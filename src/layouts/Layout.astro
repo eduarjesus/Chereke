@@ -1,0 +1,106 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'chereke — cerámica y piezas de arcilla hechas a mano, una a una.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap site-header__inner">
+        <a href="/" class="wordmark">
+          <img src="/logo.jpg" alt="chereke" />
+        </a>
+        <a
+          class="header-contact"
+          href={`https://instagram.com/${import.meta.env.PUBLIC_INSTAGRAM_USER ?? 'chereke'}`}
+          target="_blank"
+          rel="noopener"
+        >
+          Instagram
+        </a>
+      </div>
+    </header>
+
+    <slot />
+
+    <footer class="site-footer">
+      <div class="wrap site-footer__inner">
+        <p>chereke — piezas de arcilla hechas a mano</p>
+        <p>&copy; {new Date().getFullYear()}</p>
+      </div>
+    </footer>
+
+    <style>
+      .site-header {
+        border-bottom: 1px solid rgba(70, 28, 24, 0.12);
+      }
+
+      .site-header__inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-block: 1.5rem;
+      }
+
+      .wordmark {
+        display: block;
+        line-height: 0;
+      }
+
+      .wordmark img {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .header-contact {
+        font-size: 0.9rem;
+        text-decoration: none;
+        color: var(--terracotta);
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s ease;
+      }
+
+      .header-contact:hover {
+        border-color: var(--terracotta);
+      }
+
+      .site-footer {
+        border-top: 1px solid rgba(70, 28, 24, 0.12);
+        margin-top: 5rem;
+      }
+
+      .site-footer__inner {
+        display: flex;
+        justify-content: space-between;
+        padding-block: 2rem;
+        font-size: 0.85rem;
+        color: rgba(70, 28, 24, 0.65);
+      }
+
+      @media (max-width: 640px) {
+        .site-footer__inner {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+      }
+    </style>
+  </body>
+</html>
