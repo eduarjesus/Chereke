@@ -1,0 +1,127 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getProducts } from '../lib/products';
+
+const productos = await getProducts();
+const categorias = [...new Set(productos.map((p) => p.categoria).filter(Boolean))];
+---
+
+<Layout title="chereke — piezas de arcilla hechas a mano">
+  <section class="hero wrap">
+    <div class="hero__texto">
+      <h1>Objetos que nacen del desorden</h1>
+      <p>
+        chereke es cerámica y piezas de arcilla hechas a mano, una a una, dejando
+        que el proceso —imperfecto y sincero— quede visible en cada resultado.
+      </p>
+    </div>
+  </section>
+
+  <section class="catalogo wrap" id="catalogo">
+    {categorias.length > 1 && (
+      <nav class="filtros">
+        <a href="#catalogo" class="filtro filtro--activo" data-filtro="todos">Todo</a>
+        {categorias.map((cat) => (
+          <a href="#catalogo" class="filtro" data-filtro={cat}>{cat}</a>
+        ))}
+      </nav>
+    )}
+
+    {productos.length === 0 ? (
+      <p class="vacio">Aún no hay piezas cargadas en el inventario.</p>
+    ) : (
+      <div class="grid" id="grid">
+        {productos.map((producto) => (
+          <div class="grid__item" data-categoria={producto.categoria}>
+            <ProductCard producto={producto} />
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
+
+  <script>
+    const filtros = document.querySelectorAll<HTMLAnchorElement>('.filtro');
+    const items = document.querySelectorAll<HTMLElement>('.grid__item');
+
+    filtros.forEach((filtro) => {
+      filtro.addEventListener('click', (e) => {
+        e.preventDefault();
+        const valor = filtro.dataset.filtro;
+
+        filtros.forEach((f) => f.classList.remove('filtro--activo'));
+        filtro.classList.add('filtro--activo');
+
+        items.forEach((item) => {
+          const coincide = valor === 'todos' || item.dataset.categoria === valor;
+          item.style.display = coincide ? '' : 'none';
+        });
+      });
+    });
+  </script>
+
+  <style>
+    .hero {
+      padding-block: 4rem 3rem;
+      max-width: 640px;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      line-height: 1.15;
+      margin: 0 0 1.25rem;
+    }
+
+    .hero p {
+      margin: 0;
+      color: rgba(64, 48, 31, 0.85);
+    }
+
+    .catalogo {
+      padding-bottom: 5rem;
+    }
+
+    .filtros {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(64, 48, 31, 0.15);
+      padding-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .filtro {
+      text-decoration: none;
+      color: rgba(64, 48, 31, 0.6);
+      font-size: 0.9rem;
+    }
+
+    .filtro--activo {
+      color: var(--terracotta);
+    }
+
+    .grid {
+      column-count: 3;
+      column-gap: 1.75rem;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        column-count: 2;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .grid {
+        column-count: 1;
+      }
+    }
+
+    .vacio {
+      color: rgba(64, 48, 31, 0.6);
+    }
+  </style>
+</Layout>

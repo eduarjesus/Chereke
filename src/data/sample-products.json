@@ -1,0 +1,26 @@
+[
+  {
+    "nombre": "Cuenco Marfil",
+    "precio": "18",
+    "categoria": "Cerámica",
+    "descripcion": "Cuenco torneado a mano, esmalte mate en tono marfil cálido. Cada pieza varía ligeramente en forma y textura.",
+    "disponible": "Sí",
+    "fotos": "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=800"
+  },
+  {
+    "nombre": "Jarrón Arcilla Cruda",
+    "precio": "26",
+    "categoria": "Cerámica",
+    "descripcion": "Jarrón de cuello alto sin esmaltar, acabado terroso natural.",
+    "disponible": "Sí",
+    "fotos": "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=800"
+  },
+  {
+    "nombre": "Set de Tazas Olivo",
+    "precio": "22",
+    "categoria": "Cerámica",
+    "descripcion": "Par de tazas con asa, esmalte verde oliva apagado. Vendidas como set de dos.",
+    "disponible": "No",
+    "fotos": "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=800"
+  }
+]

@@ -1,0 +1,134 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getProducts } from '../../lib/products';
+
+export async function getStaticPaths() {
+  const productos = await getProducts();
+  return productos.map((producto) => ({
+    params: { slug: producto.slug },
+    props: { producto },
+  }));
+}
+
+const { producto } = Astro.props;
+
+const numeroWhatsapp = import.meta.env.PUBLIC_WHATSAPP_NUMBER ?? '';
+const mensaje = encodeURIComponent(`Hola, me interesa "${producto.nombre}" de chereke`);
+const linkWhatsapp = `https://wa.me/${numeroWhatsapp}?text=${mensaje}`;
+---
+
+<Layout title={`${producto.nombre} — chereke`} description={producto.descripcion}>
+  <article class="wrap detalle">
+    <a href="/" class="volver">&larr; Volver al catálogo</a>
+
+    <div class="detalle__grid">
+      <div class="detalle__fotos">
+        {producto.fotos.map((foto) => (
+          <img src={foto} alt={producto.nombre} loading="lazy" />
+        ))}
+      </div>
+
+      <div class="detalle__info">
+        <h1>{producto.nombre}</h1>
+        <p class="precio">{producto.disponible ? `$${producto.precio}` : 'Agotado'}</p>
+        {producto.categoria && <p class="categoria">{producto.categoria}</p>}
+        <p class="descripcion">{producto.descripcion}</p>
+
+        {producto.disponible ? (
+          <a class="boton" href={linkWhatsapp} target="_blank" rel="noopener">
+            Preguntar por WhatsApp
+          </a>
+        ) : (
+          <p class="agotado-nota">Esta pieza ya no está disponible.</p>
+        )}
+      </div>
+    </div>
+  </article>
+
+  <style>
+    .detalle {
+      padding-block: 3rem 5rem;
+    }
+
+    .volver {
+      display: inline-block;
+      margin-bottom: 2.5rem;
+      font-size: 0.9rem;
+      color: rgba(64, 48, 31, 0.65);
+      text-decoration: none;
+    }
+
+    .volver:hover {
+      color: var(--terracotta);
+    }
+
+    .detalle__grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 3.5rem;
+    }
+
+    @media (max-width: 800px) {
+      .detalle__grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    .detalle__fotos {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .detalle__fotos img {
+      border-radius: 2px;
+    }
+
+    .detalle__info h1 {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 2.25rem;
+      margin: 0 0 0.5rem;
+    }
+
+    .precio {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.4rem;
+      color: var(--terracotta);
+      margin: 0 0 0.25rem;
+    }
+
+    .categoria {
+      font-size: 0.85rem;
+      color: rgba(64, 48, 31, 0.55);
+      margin: 0 0 1.5rem;
+    }
+
+    .descripcion {
+      color: rgba(64, 48, 31, 0.9);
+      margin-bottom: 2rem;
+    }
+
+    .boton {
+      display: inline-block;
+      background: var(--terracotta);
+      color: var(--ivory);
+      text-decoration: none;
+      padding: 0.85rem 1.75rem;
+      border-radius: 2px;
+      font-size: 0.95rem;
+      transition: background 0.2s ease;
+    }
+
+    .boton:hover {
+      background: var(--chocolate);
+    }
+
+    .agotado-nota {
+      color: rgba(64, 48, 31, 0.6);
+      font-style: italic;
+    }
+  </style>
+</Layout>
